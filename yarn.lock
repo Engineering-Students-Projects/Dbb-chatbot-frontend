@@ -1044,6 +1044,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@gsap/react@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "@gsap/react@npm:2.1.2"
+  peerDependencies:
+    gsap: ^3.12.5
+    react: ">=17"
+  checksum: 10c0/d0285391cfd7cef8125e6ddf81a063121bdb92ddf633d76c6144d8b93e3b7f7d837ec75f1fda8fd33d7efac0ad4c1aad89647e81446e9363012ada7db9f67daf
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -1264,7 +1274,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:8.3.9":
+"@mantine/hooks@npm:^8.3.9":
   version: 8.3.9
   resolution: "@mantine/hooks@npm:8.3.9"
   peerDependencies:
@@ -4480,6 +4490,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gsap@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "gsap@npm:3.13.0"
+  checksum: 10c0/a42dd2e02467a4abe96409aaf6cd0e5d697c72e05ec13c18c2271330493983aa63cc717c9dd0740fda2f884d0f56c7b98fc18b13500f0c1da94864985840da7c
+  languageName: node
+  linkType: hard
+
 "harmony-reflect@npm:^1.4.6":
   version: 1.6.2
   resolution: "harmony-reflect@npm:1.6.2"
@@ -5586,9 +5603,10 @@ __metadata:
   resolution: "mantine-vite-template@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.37.0"
+    "@gsap/react": "npm:^2.1.2"
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.7.0"
     "@mantine/core": "npm:8.3.9"
-    "@mantine/hooks": "npm:8.3.9"
+    "@mantine/hooks": "npm:^8.3.9"
     "@storybook/addon-themes": "npm:^10.0.0"
     "@storybook/react": "npm:^10.0.0"
     "@storybook/react-vite": "npm:^10.0.0"
@@ -5604,6 +5622,7 @@ __metadata:
     eslint-config-mantine: "npm:^4.0.3"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
     eslint-plugin-react: "npm:^7.37.5"
+    gsap: "npm:^3.13.0"
     identity-obj-proxy: "npm:^3.0.0"
     jsdom: "npm:^27.0.0"
     postcss: "npm:^8.5.6"
@@ -5614,6 +5633,7 @@ __metadata:
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
     react-router-dom: "npm:^7.9.4"
+    split-type: "npm:^0.3.4"
     storybook: "npm:^10.0.0"
     stylelint: "npm:^16.25.0"
     stylelint-config-standard-scss: "npm:^16.0.0"
@@ -7204,6 +7224,13 @@ __metadata:
   version: 0.6.1
   resolution: "source-map@npm:0.6.1"
   checksum: 10c0/ab55398007c5e5532957cb0beee2368529618ac0ab372d789806f5718123cc4367d57de3904b4e6a4170eb5a0b0f41373066d02ca0735a0c4d75c7d328d3e011
+  languageName: node
+  linkType: hard
+
+"split-type@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "split-type@npm:0.3.4"
+  checksum: 10c0/43cc762363316b8c58b02e97b3dd4c5b4533308bf691c4af0ce947e2dd82a27fc3ee25075c5102b87174ef40aaaae1304d80b1a42f887a24b4d6d0d6bd560181
   languageName: node
   linkType: hard
 

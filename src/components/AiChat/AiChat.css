@@ -1,0 +1,161 @@
+.intro-text {
+    font-size: 2.4rem;
+    font-weight: 300;
+    text-align: center;
+    line-height: 1.4;
+    opacity: 0;
+    transform: scale(0.9);
+    letter-spacing: 0.5px;
+    color: #f5f7fa;
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 0 20px rgba(0, 150, 255, 0.35);
+}
+
+#chat-wrapper.chat-hidden {
+    opacity: 0;
+    filter: blur(30px);
+    transform: scale(1.06);
+}
+
+
+#intro-screen {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+
+.blob {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.blob-blue {
+    background: #007aff;
+    top: -300px;
+    left: -250px;
+}
+
+.hover-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.75);
+    transition: color 0.3s ease;
+    user-select: none;
+    cursor: pointer;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.hover-title:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #592bff, #1a8eff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0px 3px 8px rgba(0,0,0,0.45);
+}
+
+.send-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 4px 12px rgba(71, 160, 255, 0.65);
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+.send-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: scale(1) !important;
+    box-shadow: none !important;
+    background: #555555;
+}
+
+
+.hover-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.75);
+    display: inline-flex;
+    gap: 2px;
+    cursor: pointer;
+    user-select: none;
+}
+.hover-letter {
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+.hover-title:hover .hover-letter {
+    color: rgba(255,255,255,1);
+}
+
+.blob-purple {
+    background: #b300ff;
+    bottom: -300px;
+    right: -250px;
+}
+
+.blob-cyan {
+    background: #00ffd5;
+    top: 40%;
+    left: 10%;
+    opacity: 0.14;
+}
+
+.light-beam {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent
+    );
+    mix-blend-mode: overlay;
+    z-index: 1;
+}
+
+
+.glass-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+            circle at 50% 0%,
+            rgba(255, 255, 255, 0.05),
+            transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("https://grainy-gradients.vercel.app/noise.png");
+    mix-blend-mode: overlay;
+    z-index: 1;
+}
