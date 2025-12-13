@@ -7,7 +7,6 @@ import { useResizeObserver } from '@mantine/hooks';
 
 import './AiChat.css';
 
-// SVG imports
 import { AiGlobeMeshSvg } from '@/components/AiChat/AiGlobeMeshSvg';
 import { NeuralNetworkSvg } from '@/components/AiChat/NeuralNetworkSvg';
 
@@ -18,17 +17,20 @@ type ChatMsg = {
 
 export function AiChat() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState('Who is Duru Beren Baş?');
   const theme = useMantineTheme();
   const [ref, rect] = useResizeObserver();
   const isPhoneWidth = rect.width < 700;
+  const [isLoading, setIsLoading] = useState(false);
 
   function runChatAnimations() {
     gsap.registerPlugin(SplitText);
     const segmenter = new Intl.Segmenter('zh', { granularity: 'word' });
 
     const target = document.querySelector('.split');
-    if (!target) return;
+    if (!target) {
+      return;
+    }
 
     gsap.set(target, { opacity: 1 });
 
@@ -101,7 +103,6 @@ export function AiChat() {
       }
     );
 
-
     gsap.to('.blob-blue', {
       x: 120,
       y: 100,
@@ -172,7 +173,9 @@ export function AiChat() {
 
     tl.add(() => {
       const el = document.getElementById('intro-screen');
-      if (el) el.style.display = 'none';
+      if (el) {
+        el.style.display = 'none';
+      }
 
       setTimeout(() => runChatAnimations(), 150);
     });
@@ -237,28 +240,53 @@ export function AiChat() {
       ease: 'sine.inOut',
     });
   });
-
-  // ---------------------------------------------------------
-  // CHAT SEND LOGIC
-  // ---------------------------------------------------------
-  function handleSend() {
-    if (!input.trim()) return;
+  async function handleSend() {
+    if (!input.trim() || isLoading) return;
 
     const userMsg: ChatMsg = { role: 'user', text: input };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const aiMsg: ChatMsg = {
-        role: 'ai',
-        text: `AI response for: ${userMsg.text}`,
-      };
-      setMessages((prev) => [...prev, aiMsg]);
-    }, 400);
+    let res: Response;
+
+    try {
+      res = await fetch('https://dbb-chatbot.auronvila.com/api/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userMsg.text }),
+      });
+    } catch {
+      setMessages((prev) => [...prev, { role: 'ai', text: 'Network error. Please try again.' }]);
+      setIsLoading(false);
+      return;
+    }
+
+    if (!res.ok) {
+      let errorText = 'Unexpected server error';
+
+      try {
+        const errJson = await res.json();
+        errorText = errJson.detail || errorText;
+      } catch {}
+
+      setMessages((prev) => [...prev, { role: 'ai', text: errorText }]);
+      setIsLoading(false);
+      return;
+    }
+
+    const data = await res.json();
+
+    setMessages((prev) => [...prev, { role: 'ai', text: data.answer }]);
+    setIsLoading(false);
   }
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === 'Enter') handleSend();
+    if (e.key === 'Enter') {
+      handleSend().then((r) => {});
+    }
   }
 
   // ---------------------------------------------------------
@@ -346,10 +374,29 @@ export function AiChat() {
                 </Paper>
               </Flex>
             ))}
+            {isLoading && (
+              <Flex justify="flex-start" mb={10}>
+                <Paper
+                  p="sm"
+                  radius="xl"
+                  style={{
+                    maxWidth: '70%',
+                    background: theme.colors.dark[5],
+                    color: 'white',
+                    border: `1px solid ${theme.colors.dark[3]}`,
+                    boxShadow: '0 4px 12px rgba(150, 0, 255, 0.25)',
+                    opacity: 0.7,
+                  }}
+                >
+                  <Text size="sm">Thinking…</Text>
+                </Paper>
+              </Flex>
+            )}
           </Box>
 
           <Flex mb={70} align="center" justify="center" gap="sm">
             <TextInput
+              disabled={isLoading}
               autoFocus
               placeholder="Ask Something About Duru Beren Baş"
               value={input}
@@ -362,10 +409,11 @@ export function AiChat() {
               rightSectionWidth={48}
               rightSection={
                 <Button
-                  className={`send-btn ${input.trim().length === 0 ? 'disabled' : ''}`}
+                  className={`send-btn ${input.trim().length === 0 || isLoading ? 'disabled' : ''}`}
                   onClick={handleSend}
+                  disabled={isLoading}
                 >
-                  ➤
+                  {isLoading ? '…' : '➤'}
                 </Button>
               }
               styles={{
