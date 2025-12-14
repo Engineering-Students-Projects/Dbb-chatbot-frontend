@@ -28,7 +28,16 @@ export function AiChat() {
   const isPhoneWidth = rect.width < 700;
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const questionsInputRef = useRef<HTMLInputElement | null>(null);
   const TEST_MODE = false;
+
+  useEffect(() => {
+    if (!isLoading) {
+      requestAnimationFrame(() => {
+        questionsInputRef.current?.focus();
+      });
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -36,7 +45,6 @@ export function AiChat() {
       block: 'end',
     });
   }, [messages, isLoading]);
-
 
   function runChatAnimations() {
     gsap.registerPlugin(SplitText);
@@ -257,58 +265,36 @@ export function AiChat() {
   });
   async function handleSend() {
     if (!input.trim() || isLoading) return;
-    setMessages((prev) => [...prev, userMsg]);
+
     const userMsg: ChatMsg = { role: 'user', text: input };
+    setMessages((prev) => [...prev, userMsg]);
 
     setInput('');
-    const normalized = userMsg.text.toLowerCase().trim();
-
-    if (TEST_MODE && testCases[normalized]) {
-      setIsLoading(true);
-
-      setTimeout(() => {
-        setMessages((prev) => [...prev, { role: 'ai', text: testCases[normalized] }]);
-        setIsLoading(false);
-      }, 600); // simulate thinking
-
-      return;
-    }
-
     setIsLoading(true);
 
-    let res: Response;
-
     try {
-      res = await fetch('https://dbb-chatbot.auronvila.com/api/ask', {
+      const res = await fetch('https://dbb-chatbot.auronvila.com/api/ask', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMsg.text }),
       });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        setMessages((prev) => [
+          ...prev,
+          { role: 'ai', text: err?.detail || 'Unexpected server error' },
+        ]);
+        return;
+      }
+
+      const data = await res.json();
+      setMessages((prev) => [...prev, { role: 'ai', text: data.answer }]);
     } catch {
       setMessages((prev) => [...prev, { role: 'ai', text: 'Network error. Please try again.' }]);
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    if (!res.ok) {
-      let errorText = 'Unexpected server error';
-
-      try {
-        const errJson = await res.json();
-        errorText = errJson.detail || errorText;
-      } catch {}
-
-      setMessages((prev) => [...prev, { role: 'ai', text: errorText }]);
-      setIsLoading(false);
-      return;
-    }
-
-    const data = await res.json();
-
-    setMessages((prev) => [...prev, { role: 'ai', text: data.answer }]);
-    setIsLoading(false);
   }
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -429,10 +415,11 @@ export function AiChat() {
 
           <Flex mb={70} align="center" justify="center" gap="sm">
             <TextInput
-              disabled={isLoading}
+              ref={questionsInputRef}
               autoFocus
               placeholder="Ask Something About Duru Beren Baş"
               value={input}
+              disabled={isLoading}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
               radius="xl"
