@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
@@ -15,6 +15,11 @@ type ChatMsg = {
   text: string;
 };
 
+const testCases: Record<string, string> = {
+  'who is duru beren baş?':
+    'Duru Beren Baş is a 21-year-old Computer Engineering student at Doğuş University, interested in AI, machine learning, and chatbot development.',
+};
+
 export function AiChat() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState('Who is Duru Beren Baş?');
@@ -22,6 +27,16 @@ export function AiChat() {
   const [ref, rect] = useResizeObserver();
   const isPhoneWidth = rect.width < 700;
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const TEST_MODE = false;
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
+  }, [messages, isLoading]);
+
 
   function runChatAnimations() {
     gsap.registerPlugin(SplitText);
@@ -242,10 +257,23 @@ export function AiChat() {
   });
   async function handleSend() {
     if (!input.trim() || isLoading) return;
-
-    const userMsg: ChatMsg = { role: 'user', text: input };
     setMessages((prev) => [...prev, userMsg]);
+    const userMsg: ChatMsg = { role: 'user', text: input };
+
     setInput('');
+    const normalized = userMsg.text.toLowerCase().trim();
+
+    if (TEST_MODE && testCases[normalized]) {
+      setIsLoading(true);
+
+      setTimeout(() => {
+        setMessages((prev) => [...prev, { role: 'ai', text: testCases[normalized] }]);
+        setIsLoading(false);
+      }, 600); // simulate thinking
+
+      return;
+    }
+
     setIsLoading(true);
 
     let res: Response;
@@ -354,7 +382,7 @@ export function AiChat() {
               <Flex key={i} justify={msg.role === 'user' ? 'flex-end' : 'flex-start'} mb={10}>
                 <Paper
                   p="sm"
-                  radius="xl"
+                  radius="lg"
                   style={{
                     whiteSpace: 'pre-wrap',
                     wordBreak: 'break-word',
@@ -378,7 +406,7 @@ export function AiChat() {
               <Flex justify="flex-start" mb={10}>
                 <Paper
                   p="sm"
-                  radius="xl"
+                  radius="lg"
                   style={{
                     maxWidth: '70%',
                     background: theme.colors.dark[5],
@@ -388,10 +416,15 @@ export function AiChat() {
                     opacity: 0.7,
                   }}
                 >
-                  <Text size="sm">Thinking…</Text>
+                  <Text size="sm" className="typing-dots">
+                    <span />
+                    <span />
+                    <span />
+                  </Text>
                 </Paper>
               </Flex>
             )}
+            <div ref={messagesEndRef} />
           </Box>
 
           <Flex mb={70} align="center" justify="center" gap="sm">
