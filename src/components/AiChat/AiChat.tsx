@@ -22,7 +22,7 @@ const testCases: Record<string, string> = {
 
 export function AiChat() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState('Who is Duru Beren Baş?');
+  const [input, setInput] = useState('Who is Duru Beren Bas?');
   const theme = useMantineTheme();
   const [ref, rect] = useResizeObserver();
   const isPhoneWidth = rect.width < 700;
