@@ -15,21 +15,15 @@ type ChatMsg = {
   text: string;
 };
 
-const testCases: Record<string, string> = {
-  'who is duru beren baş?':
-    'Duru Beren Baş is a 21-year-old Computer Engineering student at Doğuş University, interested in AI, machine learning, and chatbot development.',
-};
-
 export function AiChat() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState('Who is Duru Beren Bas?');
+  const [input, setInput] = useState('Who is Duru?');
   const theme = useMantineTheme();
   const [ref, rect] = useResizeObserver();
   const isPhoneWidth = rect.width < 700;
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const questionsInputRef = useRef<HTMLInputElement | null>(null);
-  const TEST_MODE = false;
 
   useEffect(() => {
     if (!isLoading) {
@@ -56,24 +50,6 @@ export function AiChat() {
     }
 
     gsap.set(target, { opacity: 1 });
-
-    const split = SplitText.create(target, {
-      type: 'words',
-      wordsClass: 'word',
-      prepareText: (text) =>
-        [...segmenter.segment(text)].map((s) => s.segment).join(String.fromCharCode(8204)),
-      wordDelimiter: { delimiter: /\u200c/, replaceWith: ' ' },
-      autoSplit: true,
-      onSplit(self) {
-        gsap.from(self.words, {
-          y: 50,
-          opacity: 0,
-          stagger: 0.1,
-          ease: 'back.out(1.7)',
-          duration: 0.6,
-        });
-      },
-    });
 
     gsap.fromTo(
       '.ai-globe-svg .globe-lat',
