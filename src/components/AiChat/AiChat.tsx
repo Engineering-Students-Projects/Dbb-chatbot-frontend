@@ -239,6 +239,7 @@ export function AiChat() {
       ease: 'sine.inOut',
     });
   });
+
   async function handleSend() {
     if (!input.trim() || isLoading) return;
 
@@ -277,6 +278,28 @@ export function AiChat() {
     if (e.key === 'Enter') {
       handleSend().then((r) => {});
     }
+  }
+
+  function renderWithLinks(text: string) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.split(urlRegex).map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#3b82f6', textDecoration: 'underline' }}
+          >
+            {part}
+          </a>
+        );
+      }
+
+      return part;
+    });
   }
 
   // ---------------------------------------------------------
@@ -359,7 +382,7 @@ export function AiChat() {
                   }}
                 >
                   <Text size="sm" style={{ whiteSpace: 'pre-wrap' }}>
-                    {msg.text}
+                    {renderWithLinks(msg.text)}
                   </Text>
                 </Paper>
               </Flex>
