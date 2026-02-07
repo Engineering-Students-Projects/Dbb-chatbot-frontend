@@ -288,20 +288,25 @@ export function AiChat() {
     });
   });
 
-  async function handleSend() {
-    if (!input.trim() || isLoading) return;
+  async function handleSend(overrideText?: string) {
+    const textToSend = overrideText ?? input;
 
-    const userMsg: ChatMsg = { role: 'user', text: input };
+    if (!textToSend.trim() || isLoading) return;
+
+    const userMsg: ChatMsg = { role: 'user', text: textToSend };
     setMessages((prev) => [...prev, userMsg]);
 
-    setInput('');
+    if (!overrideText) {
+      setInput('');
+    }
+
     setIsLoading(true);
 
     try {
       const res = await fetch('https://dbb-chatbot.auronvila.com/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg.text }),
+        body: JSON.stringify({ message: textToSend }),
       });
 
       if (!res.ok) {
@@ -324,7 +329,7 @@ export function AiChat() {
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
-      handleSend().then((r) => {});
+      handleSend().then();
     }
   }
 
@@ -478,7 +483,7 @@ export function AiChat() {
                 <Button
                   style={{ zIndex: 99 }}
                   className={`send-btn ${input.trim().length === 0 || isLoading ? 'disabled' : ''}`}
-                  onClick={handleSend}
+                  onClick={() => handleSend()}
                   disabled={isLoading}
                 >
                   {isLoading ? '…' : '➤'}
@@ -500,7 +505,7 @@ export function AiChat() {
                   faqOpen={faqOpen}
                   setFaqOpen={setFaqOpen}
                   setInput={setInput}
-                  handleSend={handleSend}
+                  handleSend={(res) => handleSend(res)}
                 />
               </Affix>
             )}

@@ -17,7 +17,7 @@ export function FaqAffix({
   faqOpen: boolean;
   setFaqOpen: (v: boolean | ((o: boolean) => boolean)) => void;
   setInput: (v: string) => void;
-  handleSend: () => void;
+  handleSend: (req:string) => void;
 }) {
   const [showHint, setShowHint] = useState(true);
 
@@ -97,8 +97,8 @@ export function FaqAffix({
                 <UnstyledButton
                   key={i}
                   onClick={() => {
-                    setInput(f.q);
-                    handleSend();
+                    setInput('');
+                    handleSend(f.q);
                     setFaqOpen(false);
                     setShowHint(false);
                   }}
