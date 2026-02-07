@@ -23,6 +23,7 @@
     "@gsap/react": "^2.1.2",
     "@mantine/core": "8.3.9",
     "@mantine/hooks": "^8.3.9",
+    "@tabler/icons-react": "^3.36.1",
     "gsap": "^3.13.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

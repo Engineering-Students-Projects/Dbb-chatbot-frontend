@@ -197,3 +197,31 @@
     mix-blend-mode: overlay;
     z-index: 1;
 }
+
+.faq-float-btn {
+    position: relative;
+    animation: floatY 3s ease-in-out infinite;
+}
+
+.faq-glow {
+    position: absolute;
+    inset: -6px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(0,122,255,0.5), transparent 70%);
+    filter: blur(12px);
+    opacity: 0.7;
+    animation: pulseGlow 2.5s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes floatY {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulseGlow {
+    0% { opacity: 0.5; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.5; transform: scale(0.9); }
+}

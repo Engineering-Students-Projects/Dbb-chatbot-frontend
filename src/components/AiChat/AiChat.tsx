@@ -2,12 +2,25 @@ import { useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
-import { Box, Button, Flex, Paper, Text, TextInput, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Affix,
+  Box,
+  Button,
+  Flex,
+  Group,
+  Paper,
+  ScrollArea,
+  Text,
+  TextInput,
+  useMantineTheme,
+} from '@mantine/core';
 import { useResizeObserver } from '@mantine/hooks';
 
 import './AiChat.css';
 
 import { AiGlobeMeshSvg } from '@/components/AiChat/AiGlobeMeshSvg';
+import { FaqAffix } from '@/components/AiChat/FaqAffix';
 import { NeuralNetworkSvg } from '@/components/AiChat/NeuralNetworkSvg';
 
 type ChatMsg = {
@@ -17,13 +30,48 @@ type ChatMsg = {
 
 export function AiChat() {
   const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState('Who is Duru?');
+  const [input, setInput] = useState('Who is Duru Beren Baş?');
   const theme = useMantineTheme();
   const [ref, rect] = useResizeObserver();
   const isPhoneWidth = rect.width < 700;
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const questionsInputRef = useRef<HTMLInputElement | null>(null);
+  const [faqOpen, setFaqOpen] = useState(false);
+
+  const faqs = [
+    { q: 'Who is Duru Beren Baş?' },
+
+    { q: 'Which university does Duru Beren Baş study at?' },
+    { q: 'What department is Duru Beren Baş studying?' },
+    { q: 'What year is Duru Beren Baş in university?' },
+    { q: 'What are Duru Beren Baş’s academic interests?' },
+
+    { q: 'What programming languages does Duru Beren Baş know?' },
+    { q: 'What technologies is Duru Beren Baş focused on?' },
+    { q: 'Does Duru Beren Baş work on Artificial Intelligence projects?' },
+    { q: 'Is Duru Beren Baş interested in backend development?' },
+    { q: 'Does Duru Beren Baş have experience with chatbot systems?' },
+
+    { q: 'What certifications does Duru Beren Baş have?' },
+    { q: 'Has Duru Beren Baş attended any AI bootcamps?' },
+
+    { q: 'Does Duru Beren Baş have leadership experience?' },
+    { q: 'What is Mühendis Beyinler Kulübü and Duru Beren Baş’s role there?' },
+
+    { q: 'Is Duru Beren Baş currently working?' },
+    { q: 'Is Duru Beren Baş looking for internships?' },
+    { q: 'What type of job opportunities is Duru Beren Baş seeking?' },
+    { q: 'Can I see Duru Beren Baş’s CV?' },
+
+    { q: 'How can I contact Duru Beren Baş?' },
+    { q: 'Where can I find Duru Beren Baş’s LinkedIn profile?' },
+    { q: 'Where can I see Duru Beren Baş’s GitHub projects?' },
+
+    { q: 'What languages does Duru Beren Baş speak?' },
+    { q: 'Does Duru Beren Baş play any musical instruments?' },
+    { q: 'What are Duru Beren Baş’s hobbies?' },
+  ];
 
   useEffect(() => {
     if (!isLoading) {
@@ -411,9 +459,9 @@ export function AiChat() {
             )}
             <div ref={messagesEndRef} />
           </Box>
-
           <Flex mb={70} align="center" justify="center" gap="sm">
             <TextInput
+              style={{ zIndex: 99 }}
               ref={questionsInputRef}
               autoFocus
               placeholder="Ask Something About Duru Beren Baş"
@@ -428,6 +476,7 @@ export function AiChat() {
               rightSectionWidth={48}
               rightSection={
                 <Button
+                  style={{ zIndex: 99 }}
                   className={`send-btn ${input.trim().length === 0 || isLoading ? 'disabled' : ''}`}
                   onClick={handleSend}
                   disabled={isLoading}
@@ -444,6 +493,17 @@ export function AiChat() {
                 },
               }}
             />
+            {!isPhoneWidth && (
+              <Affix position={{ bottom: 30, right: 30 }} zIndex={200}>
+                <FaqAffix
+                  faqs={faqs}
+                  faqOpen={faqOpen}
+                  setFaqOpen={setFaqOpen}
+                  setInput={setInput}
+                  handleSend={handleSend}
+                />
+              </Affix>
+            )}
           </Flex>
 
           <div className="animated-svgs">
