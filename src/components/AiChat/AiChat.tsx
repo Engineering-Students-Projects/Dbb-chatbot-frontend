@@ -57,7 +57,7 @@ export function AiChat() {
     { q: 'Has Duru Beren Baş attended any AI bootcamps?' },
 
     { q: 'Does Duru Beren Baş have leadership experience?' },
-    { q: 'What is Mühendis Beyinler Kulübü and Duru Beren Baş’s role there?' },
+    { q: 'What role does Duru Beren Baş have in Mühendis Beyinler Kulübü?' },
 
     { q: 'Is Duru Beren Baş currently working?' },
     { q: 'Is Duru Beren Baş looking for internships?' },
