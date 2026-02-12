@@ -2,26 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
-import {
-  ActionIcon,
-  Affix,
-  Box,
-  Button,
-  Flex,
-  Group,
-  Paper,
-  ScrollArea,
-  Text,
-  TextInput,
-  useMantineTheme,
-} from '@mantine/core';
+import { ActionIcon, Affix, Box, Button, Flex, Group, Paper, ScrollArea, Text, TextInput, useMantineTheme } from '@mantine/core';
 import { useResizeObserver } from '@mantine/hooks';
 
+
+
 import './AiChat.css';
+
+
 
 import { AiGlobeMeshSvg } from '@/components/AiChat/AiGlobeMeshSvg';
 import { FaqAffix } from '@/components/AiChat/FaqAffix';
 import { NeuralNetworkSvg } from '@/components/AiChat/NeuralNetworkSvg';
+
 
 type ChatMsg = {
   role: 'user' | 'ai';
@@ -303,7 +296,7 @@ export function AiChat() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('https://dbb-chatbot.auronvila.com/api/ask', {
+      const res = await fetch('https://dbb-chatbot.auronvila.com/api/ask-gemini', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: textToSend }),
